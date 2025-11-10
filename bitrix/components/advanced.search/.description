@@ -1,0 +1,15 @@
+<?
+if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
+
+$arComponentDescription = array(
+    "NAME" => "Расширенный поиск",
+    "DESCRIPTION" => "Расширенный поиск по темам, статьям и персоналиям",
+    "ICON" => "/images/icon.gif",
+    "CACHE_PATH" => "Y",
+    "PATH" => array(
+        "ID" => "content",
+        "NAME" => "Контент",
+    ),
+    "COMPLEX" => "N"
+);
+?>
