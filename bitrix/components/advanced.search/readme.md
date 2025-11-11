@@ -8,11 +8,11 @@ advanced.search/
 
     ├── .parameters.php  
     ├── .description.php  
-    ├── style.css
     ├── component.php 
     └── templates/  
         └── .default/  
             └── template.php  
+            └── style.css   
 
 ## Использование
 ```
