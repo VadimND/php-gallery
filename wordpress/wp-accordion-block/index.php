@@ -211,34 +211,40 @@ window.onload = function(){
 
     if (!hash) return;
 
-    if (hash === 'mrt' || hash === 'uzi' || hash === 'nevrologia' || hash === 'ortopedia' || hash === 'revmatologia') {
+    setTimeout(() => {
+        const tabhead = document.getElementById(hash);
+        const tabbody = tabhead.querySelector(".aio-body");
 
-		setTimeout(() => {			
-            const tabhead = document.getElementById(hash);
-			const tabbody = tabhead.querySelector(".aio-body");
+        if (tabhead && tabbody) {
 
-			if (tabhead && tabbody) {
+            openBox(tabhead, tabbody);
 
-				openBox(tabhead, tabbody);
+            tabhead.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    }, 100);	
 
-				tabhead.scrollIntoView({
-					behavior: 'smooth',
-					block: 'start'
-				});
-			}
-		}, 100);
-	}
+    document.addEventListener("click", function (e) {
+        if (e.target.tagName === 'A' || e.target.closest('a')) {
+            const link = e.target.tagName === 'A' ? e.target : e.target.closest('a');
+            const urlWithoutHash = link.href.split('#')[0];
+            const urlWithHash = link.hash;
 
+            if (urlWithoutHash === 'https://xxxxx.xx/xxxx-xxxxx/') {
+               window.location.hash = urlWithHash;
+               window.location.reload();
+            }
+        }
+        const header = e.target.closest(".aio-header");
+        if (!header) return;
+        const item = header.parentElement;
+        const body = item.querySelector(".aio-body");
+        openBox(item, body);
+
+    });
 };
-document.addEventListener("click", function (e) {
-    const header = e.target.closest(".aio-header");
-    const item = header.parentElement;
-    const body = item.querySelector(".aio-body");
-    if (!header) return;
-
-    openBox(item, body);
-
-});
 
 </script>
 <?php
