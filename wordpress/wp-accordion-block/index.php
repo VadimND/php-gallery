@@ -33,23 +33,20 @@
                     $item_id = ' id="' . esc_attr($attrs['itemId']) . '"';
                 }
             ob_start(); ?>
-            <div class="aio-item"<?php echo $item_id; ?>>
-                <button class="aio-header">
-                    <?php echo esc_html($attrs['title']); ?>
-                    <svg viewBox="0 0 24 24" class="aio-arrow">
-                        <path d="M6 9l6 6 6-6"
-                              fill="none"
-                              stroke="currentColor"
-                              stroke-width="2"/>
-                    </svg>
-                </button>
-                <div class="aio-body">
-                    <div class="aio-inner">
-                        <?php echo $content; ?>
-                    </div>
-                </div>
-            </div>
-            <?php
+<div class="aio-item" <?php echo $item_id; ?>>
+    <button class="aio-header">
+        <?php echo esc_html($attrs['title']); ?>
+        <svg viewBox="0 0 24 24" class="aio-arrow">
+            <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" />
+        </svg>
+    </button>
+    <div class="aio-body">
+        <div class="aio-inner">
+            <?php echo $content; ?>
+        </div>
+    </div>
+</div>
+<?php
                 return ob_get_clean();
                         },
                     ]);
@@ -130,34 +127,39 @@
 <style>
 .aio-accordion {
     border: 1px solid #ddd;
-	padding: 10px;
+    padding: 10px;
 }
+
 .aio-header {
     width: 100%;
     padding: 15px;
     background: #f3f3f3;
     border: none;
     font-weight: bold;
-	font-size: 18px;
+    font-size: 18px;
     display: flex;
     justify-content: space-between;
     cursor: pointer;
     color: #681B21;
     text-transform: uppercase;
     margin: 0;
-	text-align: left;
+    text-align: left;
 }
+
 .aio-accordion .aio-accordion .aio-header {
-	font-size: 24px;
+    font-size: 24px;
 }
+
 .aio-body {
     height: 0;
     overflow: hidden;
     transition: height .3s ease;
 }
+
 .aio-item:not(:last-child) {
     border-bottom: 10px solid #fff;
 }
+
 .aio-inner {
     padding: 12px;
 }
@@ -170,21 +172,27 @@
     margin: auto 0;
     min-width: 22px;
 }
-div.aio-item.active > button.aio-header > svg.aio-arrow {
-	transform: rotate(180deg);
+
+div.aio-item.active>button.aio-header>svg.aio-arrow {
+    transform: rotate(180deg);
 }
-button.aio-header:hover, button.aio-header:focus, button.aio-header:active {
+
+button.aio-header:hover,
+button.aio-header:focus,
+button.aio-header:active {
     background: var(--imred--main--wine--color--dark);
     box-shadow: none;
     color: #fff;
 }
+
 @media screen and (max-width: 414px) {
-	.aio-header {
-		font-size: 18px;
-	}
-	.aio-accordion .aio-accordion .aio-header {
-		font-size: 18px;
-	}
+    .aio-header {
+        font-size: 18px;
+    }
+
+    .aio-accordion .aio-accordion .aio-header {
+        font-size: 18px;
+    }
 }
 </style>
 
@@ -205,36 +213,36 @@ function openBox(item, body) {
     }
 }
 
-window.onload = function(){
+window.onload = function() {
     const items = document.querySelectorAll('.aio-item');
-	const hash = window.location.hash.substring(1);
+    const hash = window.location.hash.substring(1);
 
-    if (!hash) return;
+    if (hash) {
+        setTimeout(() => {
+            const tabhead = document.getElementById(hash);
+            const tabbody = tabhead.querySelector(".aio-body");
 
-    setTimeout(() => {
-        const tabhead = document.getElementById(hash);
-        const tabbody = tabhead.querySelector(".aio-body");
+            if (tabhead && tabbody) {
 
-        if (tabhead && tabbody) {
+                openBox(tabhead, tabbody);
 
-            openBox(tabhead, tabbody);
+                tabhead.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        }, 300);
+    }
 
-            tabhead.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
-    }, 100);	
-
-    document.addEventListener("click", function (e) {
+    document.addEventListener("click", function(e) {
         if (e.target.tagName === 'A' || e.target.closest('a')) {
             const link = e.target.tagName === 'A' ? e.target : e.target.closest('a');
             const urlWithoutHash = link.href.split('#')[0];
             const urlWithHash = link.hash;
 
             if (urlWithoutHash === 'https://xxxxx.xx/xxxx-xxxxx/') {
-               window.location.hash = urlWithHash;
-               window.location.reload();
+                window.location.hash = urlWithHash;
+                window.location.reload();
             }
         }
         const header = e.target.closest(".aio-header");
@@ -245,7 +253,6 @@ window.onload = function(){
 
     });
 };
-
 </script>
 <?php
 });
