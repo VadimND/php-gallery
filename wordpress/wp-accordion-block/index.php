@@ -1,38 +1,38 @@
 <?php
 
-    /**
-     * Plugin Name: Аккордеон (InnerBlocks, WP 5.9)
-     * Version: 1.0.0
-     * Author: VadimND
-     * Description: Plugin for Gutenberg which adds new Accordion widget to editor panel. WP API (ver. 5.9.3)
-     */
-    add_action('init', function () {
+/**
+ * Plugin Name: Аккордеон (InnerBlocks, WP 5.9)
+ * Version: 1.0.0
+ * Author: VadimND
+ * Description: Plugin for Gutenberg which adds new Accordion widget to editor panel. WP API (ver. 5.9.3)
+ */
+add_action('init', function () {
+    register_block_type('aio/accordion', [
+        'editor_script' => 'aio-accordion-editor',
+        'render_callback' => function ($attrs, $content) {
+            return '<div class="aio-accordion">' . $content . '</div>';
+        },
+    ]);
 
-        register_block_type('aio/accordion', [
-            'editor_script'   => 'aio-accordion-editor',
-            'render_callback' => function ($attrs, $content) {
-                return '<div class="aio-accordion">' . $content . '</div>';
-            },
-        ]);
-
-        register_block_type('aio/accordion-item', [
-            'editor_script'   => 'aio-accordion-editor',
-            'attributes'      => [
-                'title'  => [
-                    'type'    => 'string',
-                    'default' => 'Заголовок',
-                ],
-                'itemId' => [
-                    'type'    => 'string',
-                    'default' => '',
-                ],
+    register_block_type('aio/accordion-item', [
+        'editor_script' => 'aio-accordion-editor',
+        'attributes' => [
+            'title' => [
+                'type' => 'string',
+                'default' => 'Заголовок',
             ],
-            'render_callback' => function ($attrs, $content) {
-                $item_id = '';
-                if (! empty($attrs['itemId'])) {
-                    $item_id = ' id="' . esc_attr($attrs['itemId']) . '"';
-                }
-            ob_start(); ?>
+            'itemId' => [
+                'type' => 'string',
+                'default' => '',
+            ],
+        ],
+        'render_callback' => function ($attrs, $content) {
+            $item_id = '';
+            if (!empty($attrs['itemId'])) {
+                $item_id = ' id="' . esc_attr($attrs['itemId']) . '"';
+            }
+            ob_start();
+?>
 <div class="aio-item" <?php echo $item_id; ?>>
     <button class="aio-header">
         <?php echo esc_html($attrs['title']); ?>
@@ -47,24 +47,21 @@
     </div>
 </div>
 <?php
-                return ob_get_clean();
-                        },
-                    ]);
-                });
+            return ob_get_clean();
+        },
+    ]);
+});
 
-                /**
-                 * Editor JS
-                 */
-                add_action('enqueue_block_editor_assets', function () {
+/** Editor JS */
+add_action('enqueue_block_editor_assets', function () {
+    wp_enqueue_script(
+        'aio-accordion-editor',
+        plugins_url('', __FILE__),
+        ['wp-blocks', 'wp-element', 'wp-editor', 'wp-components'],
+        '1.0.0'
+    );
 
-                    wp_enqueue_script(
-                        'aio-accordion-editor',
-                        plugins_url('', __FILE__),
-                        ['wp-blocks', 'wp-element', 'wp-editor', 'wp-components'],
-                        '1.0.0'
-                    );
-
-                    wp_add_inline_script('aio-accordion-editor', '
+    wp_add_inline_script('aio-accordion-editor', '
         (function () {
             const { registerBlockType } = wp.blocks;
             const { createElement: el } = wp.element;
@@ -117,13 +114,11 @@
             });
         })();
     ');
-                });
+});
 
-                /**
-                 * Frontend styles + JS
-                 */
-                add_action('wp_footer', function () {
-                ?>
+/** Frontend styles + JS */
+add_action('wp_footer', function () {
+?>
 <style>
 .aio-accordion {
     border: 1px solid #ddd;

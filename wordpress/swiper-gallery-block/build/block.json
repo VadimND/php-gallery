@@ -1,0 +1,48 @@
+{
+  "apiVersion": 2,
+  "name": "swiper-gallery/block",
+  "title": "Swiper Gallery",
+  "category": "media",
+  "icon": "images-alt2",
+  "description": "Галерея слайдов на основе Swiper.js с LightGallery",
+  "keywords": ["галерея", "слайдер", "swiper", "lightgallery"],
+  "version": "1.0.0",
+  "textdomain": "swiper-gallery",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "attributes": {
+    "images": {
+      "type": "array",
+      "default": []
+    },
+    "slidesPerView": {
+      "type": "number",
+      "default": 3
+    },
+    "spaceBetween": {
+      "type": "number",
+      "default": 15
+    },
+    "showNavigation": {
+      "type": "boolean",
+      "default": true
+    },
+    "showPagination": {
+      "type": "boolean",
+      "default": true
+    },
+    "autoplay": {
+      "type": "boolean",
+      "default": false
+    },
+    "autoplayDelay": {
+      "type": "number",
+      "default": 3000
+    },
+    "loop": {
+      "type": "boolean",
+      "default": true
+    }
+  }
+}
