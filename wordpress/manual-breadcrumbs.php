@@ -9,6 +9,7 @@ function getManualBreadcrumbs(int $page_id) : string {
 
     $link = get_permalink($page_id);
     $page_title = get_the_title($page_id);
+    $post_categories = wp_get_post_categories($page_id);
     $str_nav = '';
     $chain = '';
 
@@ -111,15 +112,13 @@ function getManualBreadcrumbs(int $page_id) : string {
     ];
 
     foreach($arr as $key => $a) {
-        if(in_array($link, $a) === true) {
+        if(in_array($link, $a)) {
             $chain = $key;
             break;
         }
     }
 
-    $str_nav = '<nav aria-label="breadcrumbs">';
-    $str_nav .= '<a href="/">Главная</a>';
-    $str_nav .= '<span class="separator"> » </span>';
+    $str_nav = '<nav aria-label="breadcrumbs"><a href="/">Главная</a><span class="separator"> » </span>';
 
     if (empty($chain) === false || $chain === 0) {
         foreach ($arr_map[$chain] as $key=>$slug) {
@@ -128,10 +127,7 @@ function getManualBreadcrumbs(int $page_id) : string {
         }
     }
 
-    $post_categories = wp_get_post_categories(get_the_id());
-
     if (in_array(22, $post_categories)) {
-        $str_nav = '<nav aria-label="breadcrumbs"><a href="/">Главная</a><span class="separator"> » </span>';
         $str_nav .= '<a href="/doctors-filter/">Врачи</a><span class="separator"> » </span>';
     }
 
