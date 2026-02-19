@@ -10,7 +10,6 @@ function getManualBreadcrumbs(int $page_id) : string {
     $link = get_permalink($page_id);
     $page_title = get_the_title($page_id);
     $post_categories = wp_get_post_categories($page_id);
-    $str_nav = '';
     $chain = '';
 
     $arr = [
@@ -136,3 +135,5 @@ function getManualBreadcrumbs(int $page_id) : string {
     // At the end of the function, we return the generated breadcrumb navigation string
     return $str_nav;
 }
+
+// Example usage: echo getManualBreadcrumbs(get_the_ID());
