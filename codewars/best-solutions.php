@@ -1,8 +1,146 @@
 <?php
 /*
-All my kata are presented here:
-https://www.codewars.com/users/javadimus/completed
+* All my katas are presented here:
+* https://www.codewars.com/users/javadimus/completed
 */
+
+// First Fibonacci
+
+function solution(int $first, int $second): array
+{
+    $arr = [];
+    $arr = [$second, $afirst];
+    $i = 0;
+
+    while($arr[$i] - $arr[$i+1] >= 0) {
+      $arr[] = $arr[$i] - $arr[$i+1];
+      $i++;
+    }
+
+   return [$arr[count($arr) - 2], $arr[count($arr) - 3]];
+}
+
+// Excel sheet column numbers
+
+function titleToNumber(string $title) : int {
+  $arr = range('A', 'Z');
+  $pos = array_search($title[0], $arr) + 1;
+
+  for($i = 1; $i < strlen($title); $i++) {
+     $pos = 26 * $pos + array_search($title[$i], $arr) + 1;
+  }
+
+  return $pos;
+}
+
+// Band name generator
+
+function band_name_generator(string $s): string {
+
+  if ($s[0] === $s[strlen($s) - 1]) {
+    $res = ucfirst($s) . substr($s, 1);
+  } else {
+    $res = "The " . ucfirst($s);
+  }
+
+  return $res;
+}
+
+// Double Trouble
+
+function trouble(array $x, int $t) : array
+{
+  for($i = 0; $i < (count($x) - 1); $i++) {
+    if($x[$i] + $x[$i+1] === $t) {
+        unset($x[$i+1]);
+        $x = array_values($x);
+        $i--;
+    };
+  }
+
+  return $x;
+}
+
+// Can Santa save Christmas?
+
+function determine_time(array $durations): bool {
+
+    $hours = $mins = $secs = [];
+
+    if($durations === []) return true;
+
+    foreach($durations as $unit) {
+        foreach(explode(":", $unit) as $key => $bit) {
+          if($key === 0) $hours[] = (int) $bit;
+          if($key === 1) $mins[] = (int) $bit;
+          if($key === 2) $secs[] = (int) $bit;
+        }
+    }
+
+    $s_res = array_sum($secs) % 60;
+    $m_res = (array_sum($mins) + intdiv(array_sum($secs), 60)) % 60;
+    $h_res = array_sum($hours) + intdiv(array_sum($mins) + intdiv(array_sum($secs), 60), 60);
+
+    if($h_res > 24 || $h_res === 24 && ($m_res > 0 || $s_res > 0)) {
+        return false;
+    }
+
+    return true;
+}
+
+// Convert a linked list to a string
+
+function stringify($list): string {
+  $str = '';
+  if(!is_null($list)) {
+    foreach($list as $value) {
+      if (is_int($value)) {
+        $str .= strval($value) . ' -> ';
+      } else {
+        return $str .= stringify($value);
+      }
+    }
+  } else {
+    $str .= 'NULL';
+  }
+  return $str;
+}
+
+// Sort Out The Men From Boys
+
+function menFromBoys(array $arr) : array {
+
+  $arr = array_unique($arr);
+
+  $odds = array_filter($arr, fn($n) => $n & 1);
+  $evens = array_diff($arr, $odds);
+
+  sort($odds);
+  sort($evens);
+
+  return array_merge($evens, array_reverse($odds));
+}
+
+// Build a square
+function generateShape(int $n): string {
+   return rtrim(str_repeat(str_repeat('+', $n) . PHP_EOL , $n));
+}
+
+// Bubblesort Once
+function bubblesort_once(array $a) : array {
+  $arr = $a;
+  foreach ($arr as $k => $val) {
+      if($k < count($arr) - 1) {
+          if($arr[$k] > $arr[$k+1]) {
+            $el = array_slice($arr, $k, 1);
+             array_splice($arr, $k, 1);
+              array_splice($arr, $k+1, 0, $el[0]);
+          }
+      }
+  }
+  return $arr;
+}
+
 // Function 1 - hello world
 
 define('WELCOME', 'hello world!');
