@@ -1,3 +1,5 @@
 .idea/
 bitrix/
 tasks/webbe/
+composer-autoload/vendor/
+composer.json

@@ -4,6 +4,59 @@
 * https://www.codewars.com/users/javadimus/completed
 */
 
+// draw me a chessboard
+function chessBoard(int $rows, int $columns): array {
+
+  $arr = [];
+
+  for($i = 0; $i < $rows; $i++) {
+    $arr[$i] = array_map(fn($e) => ($e + $i) % 2 === 0 ? 'O' : 'X', range(0, $columns - 1));
+  }
+
+  return $arr;
+}
+
+// Search for letters
+function change(string $string) : string {
+  $str = strtolower($string);
+  $arr = range('a', 'z');
+  $res = str_repeat('0', 26);
+  for($i = 0; $i < strlen($str); $i++) {
+    if(in_array($str[$i], $arr)) {
+        $id = array_search($str[$i], $arr);
+        $res[$id] = '1';
+    }
+  }
+  return $res;
+}
+
+// Parts of a list
+function partlist(array $arr) : array {
+   $arr_temp = [];
+    for($i = 1; $i < count($arr); $i++) {
+      $arr_temp[][] = implode(" ", array_slice($arr, 0, $i));
+      $arr_temp[$i - 1][] = implode(" ", array_slice($arr, $i));
+    }
+
+    return $arr_temp;
+}
+
+//Average Array
+function avgArray(array $arr) : array {
+    $arr_fix = [];
+    $arr_res = [];
+
+    for ($i = 0; $i < count($arr[0]); $i++) {
+        $arr_fix[] = array_column($arr, $i);
+    }
+
+    for ($i = 0; $i < count($arr_fix); $i++) {
+        $arr_res[] = array_sum($arr_fix[$i]) / count($arr_fix[$i]);
+    }
+
+    return $arr_res;
+}
+
 // First Fibonacci
 
 function solution(int $first, int $second): array
