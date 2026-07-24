@@ -5,6 +5,131 @@
  * https://www.codewars.com/users/javadimus/completed
  */
 
+// Easy wallpaper
+function wallPaper($l, $w, $h): string
+{
+    $numbers = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty'];
+    $walls_square = ($l * $h + $w * $h) * 2;
+    $rolls_square = 0.52 * 10;
+    $res = $walls_square / $rolls_square + $walls_square / $rolls_square * 0.15;
+
+    return $l > 0 && $res <= 20 ? $numbers[ceil($res)] : 'zero';
+}
+
+// All Inclusive?
+function containAllRots(string $s, array $arr): bool
+{
+    if ($s === '') {
+        return true;
+    }
+
+    $arr_str = str_split($s);
+    $arr_fix = [];
+
+    for ($i = 0; $i < count($arr_str); $i++) {
+        $arr_fix[$i] = $arr_str;
+        array_push($arr_str, $arr_str[$i]);
+        unset($arr_str[$i]);
+        $arr_fix[$i] = join($arr_fix[$i]);
+
+        if (!in_array($arr_fix[$i], $arr)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+// Composing squared strings
+function compose(string $s1, string $s2): string
+{
+    $arr1 = explode("\n", $s1);
+    $arr2 = explode("\n", $s2);
+    $n = count($arr1);
+    $result = [];
+
+    for ($i = 0; $i < $n; $i++) {
+        $left = substr($arr1[$i], 0, $i + 1);
+        $right = substr($arr2[$n - 1 - $i], 0, $n - $i);
+        $result[] = $left . $right;
+    }
+
+    return implode("\n", $result);
+}
+
+// Scaling Squared Strings
+function scale(string $s, int $k, int $n): string
+{
+    if ($s === '') {
+        return '';
+    }
+
+    $str = '';
+
+    foreach (explode("\n", $s) as $el) {
+        $str .= str_repeat(join(array_map(function ($sub) use ($k) {
+            return str_repeat($sub, $k);
+        },
+            str_split($el))) . "\n", $n);
+    }
+
+    return trim($str, "\n");
+}
+
+// How Green Is My Valley?
+function makeValley(array $a): array
+{
+    if (count($a) === 0) {
+        return [];
+    }
+
+    rsort($a);
+
+    $bottom = $a[count($a) - 1];
+    $left_win = [];
+    $right_win = [];
+
+    for ($i = 0; $i < count($a) - 1; $i++) {
+        if ($i % 2 === 0) {
+            $left_win[] = $a[$i];
+        } else {
+            $right_win[] = $a[$i];
+        }
+    }
+
+    sort($right_win);
+    $left_win[] = $bottom;
+
+    return array_merge($left_win, $right_win);
+}
+
+// A Rule of Divisibility by 7
+function seven(int $m): array
+{
+    $count = 0;
+    while ($m >= 100) {
+        $count++;
+        $m = intdiv($m, 10) - (2 * ($m - intdiv($m, 10) * 10));
+    }
+    return [$m, $count];
+}
+
+// Rotate for a Max
+function maxRot(int $n): int
+{
+    $arr[] = $n;
+    $res = str_split(strval($n));
+
+    for ($i = 0; $i < count($res) - 1; $i++) {
+        $repl = implode('', array_slice($res, $i, 1));
+        unset($res[$i]);
+        array_push($res, $repl);
+        $res = array_values($res);
+        $arr[] = implode('', $res);
+    }
+
+    return max($arr);
+}
 
 // Going to the cinema
 function movie(int $card, int $ticket, float $perc): int
@@ -49,8 +174,9 @@ function nbDig(int $n, int $d): int
 // Maximum Length Difference
 function mxdiflg(mixed $a1, mixed $a2): mixed
 {
-    if (empty($a1) || empty($a2))
+    if (empty($a1) || empty($a2)) {
         return -1;
+    }
 
     $a1_fix = array_map(fn($e) => strlen($e), $a1);
     $a2_fix = array_map(fn($e) => strlen($e), $a2);
@@ -102,10 +228,13 @@ function what_list_am_i_on(array $actions): string
 
     $arr_count = array_count_values($arr);
 
-    if (isset($arr_count['nice']) === false)
+    if (isset($arr_count['nice']) === false) {
         return 'naughty';
-    if (isset($arr_count['naughty']) === false)
+    }
+
+    if (isset($arr_count['naughty']) === false) {
         return 'nice';
+    }
 
     return $arr_count['naughty'] >= $arr_count['nice'] ? 'naughty' : 'nice';
 }
@@ -131,7 +260,7 @@ function decodeResistorColors(string $bands): string
         'gray' => 8,
         'white' => 9,
         'gold' => 0.05,
-        'silver' => 0.1
+        'silver' => 0.1,
     ];
 
     $bands_arr = explode(' ', $bands);
@@ -190,8 +319,9 @@ function solve(string $str, int $a, int $b): string
 // Validate a PIN code
 function validatePin(string $pin): bool
 {
-    if (strlen($pin) !== 4 && strlen($pin) !== 6 || !ctype_digit($pin))
+    if (strlen($pin) !== 4 && strlen($pin) !== 6 || !ctype_digit($pin)) {
         return false;
+    }
 
     return true;
 }
@@ -304,7 +434,7 @@ function trouble(array $x, int $t): array
             unset($x[$i + 1]);
             $x = array_values($x);
             $i--;
-        };
+        }
     }
 
     return $x;
@@ -316,17 +446,23 @@ function determine_time(array $durations): bool
 {
     $hours = $mins = $secs = [];
 
-    if ($durations === [])
+    if ($durations === []) {
         return true;
+    }
 
     foreach ($durations as $unit) {
         foreach (explode(':', $unit) as $key => $bit) {
-            if ($key === 0)
+            if ($key === 0) {
                 $hours[] = (int) $bit;
-            if ($key === 1)
+            }
+
+            if ($key === 1) {
                 $mins[] = (int) $bit;
-            if ($key === 2)
+            }
+
+            if ($key === 2) {
                 $secs[] = (int) $bit;
+            }
         }
     }
 
@@ -672,8 +808,9 @@ function twice_as_old(int $dad_years_old, int $son_years_old): int
 {
     $counter = 0;
 
-    if ($son_years_old > 0 && $son_years_old > 0 && $dad_years_old / $son_years_old === 2)
+    if ($son_years_old > 0 && $son_years_old > 0 && $dad_years_old / $son_years_old === 2) {
         return 0;
+    }
 
     if ($son_years_old === 0) {
         return $dad_years_old;
