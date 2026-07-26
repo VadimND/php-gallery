@@ -5,6 +5,113 @@
  * https://www.codewars.com/users/javadimus/completed
  */
 
+// Name Array Capping
+function capMe(array $names): array
+{
+    return array_map(fn($e) => ucfirst(strtolower($e)), $names);
+}
+
+// Growth of a Population
+function nbYear(int $p0, int|float $percent, int $aug, int $p): int
+{
+    $count = 0;
+    while ($p0 < $p) {
+        $count++;
+        $p0 = floor($p0 + ($p0 * $percent) / 100 + $aug);
+    }
+    return $count;
+}
+
+// Drying Potatoes
+function potatoes(int $p0, int $w0, int $p1): int
+{
+    return $w0 * ((100 - $p0)) / ((100 - $p1));
+}
+
+// Printer Errors
+function printerError(string $s): string
+{
+    return preg_match_all('/[^a-m]/', $s) . '/' . strlen($s);
+}
+
+// Speed Control
+function gps(int $s, array $x): int
+{
+    if (count($x) < 2)
+        return 0;
+
+    $speeds = array_map(
+        fn($i) => (3600 * ($x[$i + 1] - $x[$i])) / $s,
+        range(0, count($x) - 2)
+    );
+
+    return floor(max($speeds));
+}
+
+// String ends with?
+function solution(string $str, string $ending): bool
+{
+    if ($ending === '')
+        return true;
+    return substr($str, -strlen($ending)) === $ending;
+}
+
+// Correct the date-string
+function dateCorrect(null|string $datestring): null|string
+{
+    if ($datestring === '')
+        return '';
+    if (!preg_match('/^\d{2}\.\d{2}\.\d{4}$/', $datestring)) {
+        return null;
+    }
+
+    $arr = explode('.', $datestring);
+
+    $days = (int) $arr[0];
+    $months = (int) $arr[1];
+    $years = (int) $arr[2];
+
+    $mon_map = [
+        1 => 31,
+        2 => 28,
+        3 => 31,
+        4 => 30,
+        5 => 31,
+        6 => 30,
+        7 => 31,
+        8 => 31,
+        9 => 30,
+        10 => 31,
+        11 => 30,
+        12 => 31
+    ];
+
+    while ($months > 12) {
+        $months = $months - 12;
+        $years++;
+    }
+
+    while ($mon_map[$months] < $days) {
+        if ($months == 2 && ($years % 4 == 0 && $years % 100 != 0) || ($years % 400 == 0)) {
+            $days = $days - 29;
+        } else {
+            $days = $days - $mon_map[$months];
+        }
+
+        $months++;
+
+        if ($months > 12) {
+            $months = 1;
+            $years++;
+        }
+    }
+
+    $days = str_pad($days, 2, '0', STR_PAD_LEFT);
+    $months = str_pad($months, 2, '0', STR_PAD_LEFT);
+
+    return $days . '.' . $months . '.' . $years;
+}
+
 // Easy wallpaper
 function wallPaper($l, $w, $h): string
 {
