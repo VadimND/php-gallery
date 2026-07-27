@@ -5,6 +5,83 @@
  * https://www.codewars.com/users/javadimus/completed
  */
 
+// MinMaxMin: Bounded Nums
+function minMinMax(array $array): array
+{
+    $min = min($array);
+    $max = max($array);
+    $min_not_in_array = $min + 1;
+
+    while (in_array($min_not_in_array, $array)) {
+        $min_not_in_array += 1;
+    }
+
+    return [$min, $min_not_in_array, $max];
+}
+
+// Simple Fun #152: Invite More Women?
+function invite_more_women(array $a): bool
+{
+    $a_count = array_count_values($a);
+
+    return empty($a_count[-1]) ? true : (empty($a_count[1]) ? false : ($a_count[-1] < $a_count[1] ? true : false));
+}
+
+// Moves in squared strings (I)
+function horMirror($s)
+{
+    $arr = array_reverse(explode("\n", $s));
+    return implode("\n", $arr);
+}
+
+function vertMirror($s)
+{
+    $arr = explode("\n", $s);
+    return implode("\n", array_map('strrev', $arr));
+}
+
+function oper($fct, $s)
+{
+    return $fct === 'vertMirror' ? vertMirror($s) : horMirror($s);
+}
+
+// Float Stringification
+function floatToString(float $x): string
+{
+    return sprintf('%.16e', $x);
+}
+
+// Check whether a number is valid in a given numeral system
+function validateBase(string $num, int $base): bool
+{
+    $arr = array_merge(range(0, 9), range('A', 'Z'));
+
+    foreach (str_split($num) as $key => $val) {
+        if (array_search($val, $arr) >= $base)
+            return false;
+    }
+    return true;
+}
+
+// Find the area of the rectangle!
+function area(int $d, int $l): float|string
+{
+    if ($d <= $l)
+        return 'Not a rectangle';
+    $square = $l * sqrt($d ** 2 - $l ** 2);
+    return round($square, 2);
+}
+
+// All unique
+function hasUniqueChars(string $string): bool
+{
+    foreach (str_split($string) as $key => $char) {
+        if (str_contains(substr_replace($string, '', $key, 1), $char))
+            return false;
+    }
+    return true;
+}
+
 // Name Array Capping
 function capMe(array $names): array
 {
