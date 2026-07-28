@@ -5,6 +5,98 @@
  * https://www.codewars.com/users/javadimus/completed
  */
 
+// Sum and Length
+function sum_length(array $integers): string
+{
+    $zero = array_reduce($integers, fn($res, $item) => $res + ($item === 0 ? 1 : 0), 0);
+
+    $pos = array_reduce($integers, fn($res, $item) => $res + ($item > 0 ? $item : 0), 0);
+
+    $neg = array_reduce($integers, fn($res, $item) => $res + ($item < 0 ? 1 : 0), 0);
+
+    for ($i = 1; $i <= $zero; $i++) {
+        if ($i % 2 !== 0) {
+            $neg++;
+        }
+    }
+    return "$pos $neg";
+}
+
+// Calculate mean and concatenate string
+function mean(array $a): array
+{
+    preg_match_all('/[a-z]/', join($a), $chars);
+    preg_match_all('/[0-9]/', join($a), $digits);
+    $str = join($chars[0]);
+    $num = array_sum($digits[0]) / count($digits[0]);
+    return [$num, $str];
+}
+
+// Ordered Count of Characters
+function orderedCount(string $text): array
+{
+    if ($text === '')
+        return [];
+
+    $arr = [];
+
+    foreach (array_count_values(str_split($text)) as $key => $val) {
+        $arr[] = [strval($key), $val];
+    }
+
+    return $arr;
+}
+
+// Find the Middle of the Product
+function findMiddle($str): int
+{
+    if (gettype($str) !== 'string' || preg_match('/[0-9]/', $str) === 0)
+        return -1;
+    preg_match_all('/[0-9]/', $str, $matches);
+    $arr = str_split(array_product($matches[0]));
+    $count = count($arr);
+
+    if ($count % 2 === 0) {
+        return join([$arr[round($count / 2) - 1], $arr[round($count / 2)]]);
+    } else {
+        return $arr[round($count / 2) - 1];
+    }
+}
+
+// PHP Functions - Anonymous Functions (aka Closures)
+$hello_world = function () {
+    return 'Hello World';
+};
+
+$person_description = function ($name, $age, $occupation) {
+    return "$name is $age years old and currently works as a(n) $occupation";
+};
+
+// Sum of Array Averages
+function sumAverage(array $arrays): float
+{
+    return array_reduce($arrays, fn($res, $el) => $res += array_sum($el) / count($el), 0);
+}
+
+// Automorphic Number (Special Numbers Series #6)
+function automorphic(int $n): string
+{
+    $square = strval($n * $n);
+    $needle = strval($n);
+    if (substr($square, -strlen($needle)) !== $needle)
+        return 'Not!!';
+    return 'Automorphic';
+}
+
+// Genetic Algorithm Series - #3 Crossover
+function crossover(string $chromosome1, string $chromosome2, int $index): array
+{
+    $rest1 = substr_replace($chromosome1, substr($chromosome2, $index), $index);
+    $rest2 = substr_replace($chromosome2, substr($chromosome1, $index), $index);
+
+    return [$rest1, $rest2];
+}
+
 // MinMaxMin: Bounded Nums
 function minMinMax(array $array): array
 {
