@@ -5,6 +5,68 @@
  * https://www.codewars.com/users/javadimus/completed
  */
 
+// Loose Change!
+function changeCount($change): string
+{
+    $arr = [
+        'penny' => 0.01,
+        'nickel' => 0.05,
+        'dime' => 0.1,
+        'quarter' => 0.25,
+        'dollar' => 1.0
+    ];
+    $change_arr = explode(' ', $change);
+    $sum = 0;
+
+    foreach ($change_arr as $unit) {
+        if (isset($arr[$unit])) {
+            $sum += $arr[$unit];
+        }
+    }
+
+    return sprintf('$%01.2f', $sum);
+}
+
+// T.T.T.28: Crow drink water(乌鸦喝水)
+function drink_water($bottle_height, $bottle_radius, $water_height, $crow_mouth, $little_stones): array|string
+{
+    if ($bottle_height <= $water_height + $crow_mouth)
+        return [];
+    if ((array_sum($little_stones) / (M_PI * $bottle_radius * $bottle_radius) + $water_height + $crow_mouth) < $bottle_height) {
+        return 'The crow is dead.';
+    }
+
+    foreach ($little_stones as $key => $value) {
+        $arr[] = $value;
+        $acc = array_sum($arr) / (M_PI * $bottle_radius * $bottle_radius);
+
+        if (($acc + $water_height + $crow_mouth) > $bottle_height) {
+            break;
+        }
+    }
+
+    return $arr;
+}
+
+// Simple Fun #74: Growing Plant
+function growingPlant(int $upSpeed, int $downSpeed, int $desiredHeight): int
+{
+    $days = 0;
+    $count = 0;
+
+    while ($days < $desiredHeight) {
+        $count++;
+        $days += $upSpeed;
+
+        if ($days >= $desiredHeight) {
+            break;
+        }
+        $days -= $downSpeed;
+    }
+
+    return $count;
+}
+
 // Sum and Length
 function sum_length(array $integers): string
 {
