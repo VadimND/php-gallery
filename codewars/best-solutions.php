@@ -5,6 +5,81 @@
  * https://www.codewars.com/users/javadimus/completed
  */
 
+// Binary scORe
+function score(int $n): int
+{
+    if ($n === 0)
+        return 0;
+
+    $power = 1;
+    while ($power <= $n) {
+        $power <<= 1;
+    }
+
+    return $power - 1;
+}
+
+// Return pyramids
+function pyramid(int $n): string
+{
+    if ($n === 1)
+        return "/\\\n";
+    $str = '';
+    for ($i = $n - 1, $v = 0; $i >= 1; $i--, $v += 2) {
+        $str .= str_repeat(' ', $i) . '/' . str_repeat(' ', $v) . "\\\n";
+        if ($i === 1) {
+            $str .= '/' . str_repeat('_', $v + 2) . "\\\n";
+        }
+    }
+    return $str;
+}
+
+// Simple consecutive pairs
+function pairs(array $arr): int
+{
+    $arr_chunks = array_chunk($arr, 2);
+    $count = 0;
+    foreach ($arr_chunks as $arr_items) {
+        if (count($arr_items) === 2) {
+            if (abs($arr_items[0] - $arr_items[1]) === 1) {
+                $count++;
+            }
+        }
+    }
+
+    return $count;
+}
+
+// Binary sXORe
+function sxore(int $n): int
+{
+    $remainder = $n % 4;
+    return match ($remainder) {
+        0 => $n,
+        1 => 1,
+        2 => $n + 1,
+        3 => 0,
+    };
+}
+
+// Exes and Ohs
+function XO($s)
+{
+    if (empty($s))
+        return true;
+
+    $s = strtolower($s);
+    $arr_counter = count_chars($s, 1);
+
+    if (isset($arr_counter[111]) && isset($arr_counter[120])) {
+        if ($arr_counter[111] === $arr_counter[120]) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 // Loose Change!
 function changeCount($change): string
 {
