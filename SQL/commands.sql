@@ -1,3 +1,14 @@
+SELECT * FROM Customers LEFT JOIN Orders ON Customers.CustomerID = Orders.CustomerID
+UNION ALL
+SELECT * FROM Orders LEFT JOIN Customers ON Orders.CustomerID = Customers.CustomerID WHERE Customers.CustomerID IS NULL;
+
+SELECT
+    option_id,
+    option_name,
+    SUM(option_value)
+FROM tr_options
+GROUP BY option_id, option_name;
+
 SELECT
 	order_num,
 	SUM( quantity * item_price ) AS order_price
@@ -239,4 +250,3 @@ set
     rs.Open "select a.фото, a.номер_билета, a.срок_действия, a.фио, a.место_работы, a.должность, a.статус, b.код, b.статус as status from ЧИТАТЕЛИ a, статус_чит b where b.код = a.статус and (a.номер_билета= '" & num_ticket & "' or REGEXP_LIKE (ФИО, '" & fio & "', 'i'))",
     con
 
-    

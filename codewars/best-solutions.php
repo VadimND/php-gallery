@@ -5,6 +5,84 @@
  * https://www.codewars.com/users/javadimus/completed
  */
 
+// Find the divisors!
+function divisors($integer)
+{
+    $arr = [];
+    for ($i = 2; $i < $integer; $i++) {
+        if ($integer % $i === 0) {
+            $arr[] = $i;
+        }
+    }
+    return count($arr) > 0 ? $arr : "$integer is prime";
+}
+
+// Figurate Numbers #2 - Pronic Number
+function isPronic(int $n): bool
+{
+    $n = abs($n);
+
+    for ($i = 0; $i <= intval(sqrt($n)); $i++) {
+        if ($i * ($i + 1) === $n)
+            return true;
+    }
+
+    return false;
+}
+
+// The Baum-Sweet sequence
+function baumSweet(): Generator
+{
+    // a(0) = 1
+    yield 0 => 1;
+
+    $n = 1;
+    while (true) {
+        yield $n => baum_sweet($n);
+        $n++;
+    }
+}
+
+function baum_sweet(int $n): int
+{
+    if ($n === 0)
+        return 1;
+
+    $zeroCount = 0;
+    $num = $n;
+
+    while ($num > 0) {
+        if ($num & 1) {  // Бит = 1
+            if ($zeroCount % 2 !== 0) {
+                return 0;
+            }
+            $zeroCount = 0;
+        } else {
+            $zeroCount++;
+        }
+        $num >>= 1;
+    }
+
+    return ($zeroCount % 2 === 0) ? 1 : 0;
+}
+
+// Hungarian Vowel Harmony (easy)
+function dative(string $w): string
+{
+    $nek_vowels = ['e', 'é', 'i', 'í', 'ö', 'ő', 'ü', 'ű'];
+    $nak_vowels = ['a', 'á', 'o', 'ó', 'u', 'ú'];
+    preg_match('/e|é|i|í|ö|ő|ü|ű|a|á|o|ó|u|ú/', join(array_reverse(mb_str_split($w))), $matches);
+
+    if (in_array($matches[0], $nek_vowels)) {
+        $w .= 'nek';
+    }
+    if (in_array($matches[0], $nak_vowels)) {
+        $w .= 'nak';
+    }
+
+    return $w;
+}
+
 // Binary scORe
 function score(int $n): int
 {
