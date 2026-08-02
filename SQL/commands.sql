@@ -1,3 +1,17 @@
+
+SELECT
+    order_id,
+    client_id,
+    order_date,
+    amount,
+    SUM(amount) OVER (PARTITION BY client_id) AS client_total,
+    RANK() OVER (PARTITION BY client_id ORDER BY amount DESC) AS rank_in_client,
+    LAG(amount) OVER (PARTITION BY client_id ORDER BY order_date) AS prev_order_amount,
+    amount - LAG(amount) OVER (PARTITION BY client_id ORDER BY order_date) AS diff_from_prev,
+    amount * 100.0 / SUM(amount) OVER (PARTITION BY client_id) AS percentage_of_client
+FROM orders
+ORDER BY client_id, order_date;
+
 SELECT * FROM Customers LEFT JOIN Orders ON Customers.CustomerID = Orders.CustomerID
 UNION ALL
 SELECT * FROM Orders LEFT JOIN Customers ON Orders.CustomerID = Customers.CustomerID WHERE Customers.CustomerID IS NULL;

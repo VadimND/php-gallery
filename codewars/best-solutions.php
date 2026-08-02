@@ -5,6 +5,97 @@
  * https://www.codewars.com/users/javadimus/completed
  */
 
+// Circle cipher
+class Kata
+{
+    public static function encode($s)
+    {
+        $str_to_arr = str_split($s);
+        $arr = [];
+
+        while (0 < count($str_to_arr)) {
+            $arr[] = array_shift($str_to_arr);
+            $arr[] = array_pop($str_to_arr);
+        }
+        $arr_to_str = join($arr);
+        return $arr_to_str;
+    }
+
+    public static function decode($s)
+    {
+        $str_to_arr = str_split($s);
+        $arr_even = [];
+        $arr_odd = [];
+
+        for ($i = 0; $i < count($str_to_arr); $i++) {
+            if ($i % 2 === 0) {
+                $arr_even[] = $str_to_arr[$i];
+            } else {
+                $arr_odd[] = $str_to_arr[$i];
+            }
+        }
+        $arr_to_str = join($arr_even) . strrev(join($arr_odd));
+        return $arr_to_str;
+    }
+}
+
+// Simple letter removal
+function solve(string $s, int $k): string
+{
+    if (strlen($s) < $k)
+        return '';
+
+    $count_chars = count_chars($s, 1);
+
+    foreach ($count_chars as $key => $val) {
+        while ($k > 0 && str_contains($s, chr($key))) {
+            if (str_contains($s, chr($key))) {
+                $s = substr_replace($s, '', stripos($s, chr($key)), 1);
+            }
+
+            $k--;
+        }
+    }
+    return $s;
+}
+
+// Cartesian neighbors
+function cartesianNeighbor($x, $y)
+{
+    $step_1 = [[$x, $y + 1], [$x, $y - 1]];
+    $step_2 = [[$x - 1, $y + 1], [$x - 1, $y - 1], [$x - 1, $y]];
+    $step_3 = [[$x + 1, $y + 1], [$x + 1, $y - 1], [$x + 1, $y]];
+    return array_merge($step_1, $step_2, $step_3);
+}
+
+// Alphabetical Addition
+function addLetters(...$letters)
+{
+    if (empty($letters))
+        return 'z';
+    if (count($letters) === 1)
+        return implode($letters);
+
+    $sum = 0;
+
+    $arr = range('a', 'z');
+    $arr_flip = array_flip($arr);
+
+    foreach ($letters as $letter) {
+        $sum += $arr_flip[$letter] + 1;
+    }
+
+    $res = $sum > 26 ? $sum % 26 : $sum;
+
+    return $res === 0 ? 'z' : $arr[$res - 1];
+}
+
+// The reject() function
+function reject($array, $predicate)
+{
+    return array_values(array_diff($array, array_filter($array, $predicate)));
+}
+
 // Find the divisors!
 function divisors($integer)
 {
