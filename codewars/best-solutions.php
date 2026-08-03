@@ -5,6 +5,46 @@
  * https://www.codewars.com/users/javadimus/completed
  */
 
+// Reverse words
+function reverseWords($str)
+{
+    $arr = explode(' ', $str);
+    $res = '';
+
+    foreach ($arr as $k => $v) {
+        $res .= count($arr) !== $k + 1 ? strrev($v) . ' ' : strrev($v);
+    }
+
+    return $res;
+}
+
+// List of all Rationals
+
+function allRationals(): Generator
+{
+    $queue = [[1, 1]];
+    $head = 0;
+
+    while (true) {
+        [$a, $b] = $queue[$head++];
+        yield [$a, $b];
+
+        $queue[] = [$a, $a + $b];
+        $queue[] = [$a + $b, $b];
+    }
+}
+
+// noobCode 03: CHECK THESE LETTERS... see if letters in "String 2" are present in "String 1"
+function letterCheck(array $arr): bool
+{
+    foreach (str_split(strtolower($arr[1])) as $val) {
+        if (!str_contains(strtolower($arr[0]), $val)) {
+            return false;
+        }
+    }
+    return true;
+}
+
 // Circle cipher
 class Kata
 {
