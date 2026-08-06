@@ -5,6 +5,103 @@
  * https://www.codewars.com/users/javadimus/completed
  */
 
+
+//Shortest Word
+function findShort(string $str): int {
+  $arr = array_map('strlen', explode(" ", $str));
+  return min($arr);
+}
+
+//Linked Lists - Get Nth Node
+class Node {
+  public $data, $next;
+  public function __construct($data, $next = NULL) {
+    $this->data = $data;
+    $this->next = $next;
+  }
+}
+
+function get_nth(Node|null $head, int $index) {
+
+  if($index === 0) {
+    $pointer = $head;
+  } else {
+    $pointer = $head->next;
+  }
+
+  while($index > 1) {
+    if ($pointer->next == null) {
+        throw new InvalidArgumentException();
+    }
+    $index--;
+    $pointer = $pointer->next;
+  }
+
+  if ($pointer === null) {
+      throw new InvalidArgumentException();
+  }
+
+  return $pointer->data;
+
+
+}
+
+//Digits explosion
+function digits_explode(string $s): string {
+  $str = "";
+  foreach(str_split($s) as $num) {
+    $str .= str_repeat($num, intval($num));
+  }
+  return $str;
+}
+
+//Blowing Birthday Candles
+function blowCandles(string $candles): int
+{
+  $count = 0;
+  $n = 0;
+
+  while($candles !== str_repeat("0", strlen($candles))) {
+
+        while(substr($candles, $count, 1) === "0") {
+            ++$count;
+        }
+
+        $candles = substr($candles, 0, $count) . strtr(substr($candles, $count, 3), "123456789", "012345678") . substr($candles, $count + 3);
+
+        $n++;
+  }
+  return $n;
+}
+
+//Jenny the youngest detective
+function missing(array $nums, string $str) : string {
+    $long_str = str_replace(" ", "", strtolower($str));
+    $short_str = '';
+    sort($nums);
+
+    foreach($nums as $val) {
+        if(strlen($long_str) < $val) {
+            $short_str = "No mission today";
+            break;
+        }
+        $short_str .= $long_str[$val];
+    }
+
+  return $short_str;
+}
+
+//Send in the Clones
+function clonewars(int $kata_per_day): array {
+    $clones = 1;
+    $kata = $kata_per_day;
+    for ($i = $kata_per_day-1; $i > 0; $i--) {
+        $clones += $clones;
+        $kata += $i * $clones;
+    }
+    return [$clones, $kata];
+}
+
 // Reverse words
 function reverseWords($str)
 {
