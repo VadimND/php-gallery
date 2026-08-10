@@ -5,6 +5,79 @@
  * https://www.codewars.com/users/javadimus/completed
  */
 
+//Find the stray number
+function stray(array $arr) : int {
+  sort($arr);
+  return $arr[0] === $arr[1] ? end($arr) : $arr[0];
+}
+
+//Ch4113ng3
+function nerdify(string $txt): string {
+  for($i = 0; $i < strlen($txt); $i++) {
+    if($txt[$i] === 'a' || $txt[$i] === 'A') $txt[$i] = '4';
+    if($txt[$i] === 'e' || $txt[$i] === 'E') $txt[$i] = '3';
+    if($txt[$i] === 'l') $txt[$i] = '1';
+  }
+  return $txt;
+}
+
+//Square Every Digit
+function square_digits(int $num): int {
+  $str = strval($num);
+  $arr = array_map(fn($e) => pow(intval($e), 2), str_split($str));
+
+  return join($arr);
+}
+
+//Uglify Word
+function uglify_word(string $str): string
+{
+    for($i = 0, $count = 0; $i < strlen($str); $i++) {
+        if(preg_match('/[a-zA-Z]/',$str[$i]) === 1) {
+            $str[$i] = $count % 2 ? strtolower($str[$i]) : strtoupper($str[$i]);
+            $count++;
+        } else {
+            $count = 0;
+        }
+    }
+    return $str;
+}
+
+//The Skiponacci Sequence
+function skiponacci(int $n): string {
+
+  $f = 0;
+  $s = 1;
+  $next;
+  $str = '';
+
+  for($i = 1; $i <= $n; $i++) {
+      if($i == 1) {
+          $str = $s;
+      } else {
+          $next = $f + $s;
+          $f = $s;
+          $s = $next;
+
+          if($i % 2 === 0) {
+              $str .= ' skip ';
+          } else {
+             $str .= $next;
+          }
+
+      }
+  }
+  return rtrim($str);
+}
+
+//Ciphers #1 - The 01 Cipher
+function encode(string $s): string {
+  $s = strtolower($s);
+  $binary = str_repeat('01',13);
+  $letters = join(range('a', 'z'));
+
+  return strtr($s, $letters, $binary);
+}
 
 //Shortest Word
 function findShort(string $str): int {
