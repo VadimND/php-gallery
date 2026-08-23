@@ -40,11 +40,23 @@ class CatalogRelatedComponent extends CBitrixComponent
         $request = Application::getInstance()->getContext()->getRequest();
         $userDiscount = (int)$request->get('promo_discount');
 
-        if ($this->startResultCache($this->arParams['CACHE_TIME'], $elementId)) {
+        // Ограничиваем скидку 90%
+        if ($userDiscount > 90) {
+            $userDiscount = 90;
+        }
+        if ($userDiscount < 0) {
+            $userDiscount = 0;
+        }
+
+        // Добавляем userDiscount в ключ кеша
+        $cacheKey = $elementId . '_' . $userDiscount;
+
+        if ($this->startResultCache($this->arParams['CACHE_TIME'], $cacheKey)) {
             $related = RelatedProducts::get($elementId, $userDiscount);
 
             $this->arResult['ITEMS'] = $related;
             $this->arResult['COUNT'] = count($related);
+            $this->arResult['USER_DISCOUNT'] = $userDiscount;
 
             $this->includeComponentTemplate();
         }
