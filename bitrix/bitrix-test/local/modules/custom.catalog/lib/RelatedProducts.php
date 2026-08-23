@@ -67,8 +67,10 @@ class RelatedProducts
             $result[] = $element;
         }
 
+        // Теперь пользовательская функция возвращает число
+
         usort($result, function ($a, $b) {
-            return $a['FINAL_PRICE'] > $b['FINAL_PRICE'];
+            return $a['FINAL_PRICE'] <=> $b['FINAL_PRICE'];
         });
 
         return $result;
@@ -99,10 +101,21 @@ class RelatedProducts
 
     private static function loadElement($id, $iblockId)
     {
-        $res = ElementTable::getList([
-            'select' => ['ID', 'NAME', 'ACTIVE', 'IBLOCK_ID', 'PREVIEW_TEXT'],
-            'filter' => ['=ID' => $id, '=IBLOCK_ID' => $iblockId],
+        // Используем старый API для получения значения скидки
+       $res = \CIBlockElement::GetList(
+        [],
+        ['ID' => $id, 'IBLOCK_ID' => $iblockId],
+        false,
+        false,
+        [
+            'ID',
+            'NAME',
+            'ACTIVE',
+            'IBLOCK_ID',
+            'PREVIEW_TEXT',
+            'PROPERTY_DISCOUNT_PERCENT'
         ]);
+
         return $res->fetch();
     }
 
