@@ -3,8 +3,6 @@
 namespace Custom\Catalog;
 
 use Bitrix\Main\Loader;
-use Bitrix\Iblock\ElementTable;
-use Bitrix\Iblock\ElementPropertyTable;
 
 /**
  * Логика получения связанных товаров.
@@ -21,6 +19,8 @@ class RelatedProducts
 {
     const RELATED_PROP_CODE = 'RELATED_PRODUCTS';
     const STOCK_PROP_CODE = 'IN_STOCK';
+    const DISCOUNT_PROP_CODE = 'DISCOUNT_PERCENT';
+    const PRICE_PROP_CODE = 'PRICE';
 
     /**
      * Возвращает связанные товары для элемента каталога.
@@ -40,35 +40,45 @@ class RelatedProducts
             return [];
         }
 
-        $result = [];
-        foreach ($relatedIds as $relId) {
-            $element = self::loadElement($relId, $iblockId);
-            if (!$element) {
-                continue;
-            }
+        // Загружаем все данные одним запросом
+        $elements = self::loadRelatedElements($relatedIds, $iblockId);
+        if (empty($elements)) {
+            return [];
+        }
 
+        $result = [];
+        foreach ($elements as $element) {
+            // Проверка активности
             if ($element['ACTIVE'] !== 'Y') {
                 continue;
             }
 
-            $inStock = self::getStockValue($relId);
+            // Проверка наличия
+            $inStock = $element['PROPERTY_' . self::STOCK_PROP_CODE . '_VALUE'] ?? 'N';
             if ($inStock !== 'Y') {
                 continue;
             }
 
-            $basePrice = self::getBasePrice($relId);
+            $basePrice = (float)($element['PROPERTY_' . self::PRICE_PROP_CODE . '_VALUE'] ?? 0);
+            if ($basePrice <= 0) {
+                continue;
+            }
 
-            $element['FINAL_PRICE'] = PriceHelper::calculateFinalPrice(
-                $element,
-                $basePrice,
-                $userDiscount
-            );
+            // Скидка из свойства
+            $discount = (int)($element['PROPERTY_' . self::DISCOUNT_PROP_CODE . '_VALUE'] ?? 0);
+
+            // Суммируем с персональной скидкой <= 90%
+            $totalDiscount = min($discount + $userDiscount, 90);
+
+            // Расчет итоговой цены
+            $finalPrice = $basePrice * (100 - $totalDiscount) / 100;
+            $element['FINAL_PRICE'] = round($finalPrice, 2);
+            $element['DISCOUNT'] = $totalDiscount;
 
             $result[] = $element;
         }
 
         // Теперь пользовательская функция возвращает число
-
         usort($result, function ($a, $b) {
             return $a['FINAL_PRICE'] <=> $b['FINAL_PRICE'];
         });
@@ -99,48 +109,47 @@ class RelatedProducts
         return $ids;
     }
 
-    private static function loadElement($id, $iblockId)
+     /**
+     * Загружает данные элементов одним запросом.
+     *
+     * @param array $ids Массив ID элементов
+     * @param int $iblockId ID инфоблока
+     * @return array Массив элементов с заполненными свойствами
+     */
+    private static function loadRelatedElements(array $ids, $iblockId)
     {
-        // Используем старый API для получения значения скидки
-       $res = \CIBlockElement::GetList(
-        [],
-        ['ID' => $id, 'IBLOCK_ID' => $iblockId],
-        false,
-        false,
-        [
-            'ID',
-            'NAME',
-            'ACTIVE',
-            'IBLOCK_ID',
-            'PREVIEW_TEXT',
-            'PROPERTY_DISCOUNT_PERCENT'
-        ]);
+        if (empty($ids)) {
+            return [];
+        }
 
-        return $res->fetch();
-    }
+        $result = [];
 
-    private static function getStockValue($id)
-    {
-        $res = \CIBlockElement::GetProperty(
-            PriceHelper::getCatalogIblockId(),
-            $id,
-            [],
-            ['CODE' => self::STOCK_PROP_CODE]
+        // Один запрос для всех товаров
+        $res = \CIBlockElement::GetList(
+            ['ID' => 'ASC'],
+            [
+                'IBLOCK_ID' => $iblockId,
+                'ID' => $ids,
+                'ACTIVE' => 'Y'
+            ],
+            false,
+            false,
+            [
+                'ID',
+                'NAME',
+                'ACTIVE',
+                'IBLOCK_ID',
+                'PREVIEW_TEXT',
+                'PROPERTY_' . self::STOCK_PROP_CODE,
+                'PROPERTY_' . self::PRICE_PROP_CODE,
+                'PROPERTY_' . self::DISCOUNT_PROP_CODE
+            ]
         );
-        $row = $res->Fetch();
-        return $row ? $row['VALUE'] : 'N';
-    }
 
-    private static function getBasePrice($id)
-    {
-        // Цена хранится в свойстве PRICE (для простоты, без модуля catalog)
-        $res = \CIBlockElement::GetProperty(
-            PriceHelper::getCatalogIblockId(),
-            $id,
-            [],
-            ['CODE' => 'PRICE']
-        );
-        $row = $res->Fetch();
-        return $row ? (float)$row['VALUE'] : 0.0;
+        while ($row = $res->GetNext()) {
+            $result[] = $row;
+        }
+
+        return $result;
     }
 }
