@@ -1,5 +1,7 @@
 .idea/
-bitrix/
+!bitrix/
+bitrix/*
+!bitrix/bitrix-test/
 tasks/webbe/
 composer-autoload/vendor/
 composer.json
